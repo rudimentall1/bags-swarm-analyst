@@ -56,6 +56,16 @@ bags-swarm-analyst/
 ├── bot_swarm.py              # Telegram bot
 ├── twitter_bot.py            # Twitter bot (optional)
 └── requirements.txt
+
+## Token
+
+- **Name:** Bags Swarm Token
+- **Symbol:** BST
+- **Address:** `4ofVjw56C5mFvJ9js3Qy6y8ro4DveZCkYaUU6a4JpV3a`
+- **Network:** Solana Devnet
+- **Decimals:** 9
+- **Total Supply:** 1,000,000 BST
+
 License
 MIT
 
