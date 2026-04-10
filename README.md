@@ -14,7 +14,7 @@ P2P swarm of AI agents analyzing creator tokens on Bags platform. 3 independent 
 
 ## Demo Video
 
-[https://youtu.be/-KjBGF13DKw](https://www.youtube.com/watch?v=VsWcIVbkeQQ)
+[https://www.youtube.com/watch?v=VsWcIVbkeQQ](https://www.youtube.com/watch?v=VsWcIVbkeQQ)
 - **Web Dashboard:** http://212.113.107.0:5001
 - **Telegram Bot:** @bags_swarm_analyst_bot
 
