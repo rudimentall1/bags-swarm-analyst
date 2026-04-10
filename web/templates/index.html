@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bags Swarm Analyst</title>
+    <style>
+        body { font-family: monospace; background: #0a0f1e; color: #0f0; padding: 20px; }
+        h1 { color: #0f0; text-align: center; }
+        .container { display: flex; gap: 20px; flex-wrap: wrap; }
+        .card { background: #1e2a3a; border: 1px solid #0f0; border-radius: 10px; padding: 15px; margin: 10px; flex: 1; min-width: 250px; }
+        .token { border-bottom: 1px solid #0f0; padding: 10px; }
+        .buy { color: #0f0; }
+        .sell { color: #f00; }
+        .hold { color: #ff0; }
+        .score { font-size: 24px; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #0f0; padding: 8px; text-align: left; }
+        th { background: #0a0f1e; }
+        .refresh { text-align: center; margin: 20px; }
+        button { background: #0a0f1e; color: #0f0; border: 1px solid #0f0; padding: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>🐝 Bags Swarm Analyst</h1>
+    <div class="refresh">
+        <button onclick="location.reload()">🔄 Refresh</button>
+    </div>
+    <div class="container">
+        <div class="card">
+            <h2>Swarm Consensus</h2>
+            <div id="consensus">Loading...</div>
+        </div>
+        <div class="card">
+            <h2>Agents</h2>
+            <div id="agents">Loading...</div>
+        </div>
+    </div>
+    <script>
+        function fetchConsensus() {
+            fetch('/api/consensus')
+                .then(res => res.json())
+                .then(data => {
+                    const container = document.getElementById('consensus');
+                    if (data.length === 0) {
+                        container.innerHTML = '<p>No data yet</p>';
+                        return;
+                    }
+                    let html = '<table><tr><th>Token</th><th>Price</th><th>Change</th><th>Score</th><th>Rec</th></tr>';
+                    data.forEach(t => {
+                        let recClass = t.consensus_recommendation === 'BUY' ? 'buy' : (t.consensus_recommendation === 'SELL' ? 'sell' : 'hold');
+                        html += `<tr>
+                            <td><strong>${t.name}</strong> ($${t.symbol})</td>
+                            <td>$${t.price}</td>
+                            <td>${t.change}%</td>
+                            <td class="score">${t.avg_score.toFixed(1)}</td>
+                            <td class="${recClass}"><strong>${t.consensus_recommendation}</strong></td>
+                        </tr>`;
+                    });
+                    html += '</table>';
+                    container.innerHTML = html;
+                });
+        }
+        
+        function fetchAgents() {
+            fetch('/api/agents')
+                .then(res => res.json())
+                .then(data => {
+                    const container = document.getElementById('agents');
+                    if (data.length === 0) {
+                        container.innerHTML = '<p>No data yet</p>';
+                        return;
+                    }
+                    let html = '<table><tr><th>Agent</th><th>Best Token</th><th>Score</th><th>Rec</th></tr>';
+                    data.forEach(a => {
+                        let recClass = a.recommendation === 'BUY' ? 'buy' : (a.recommendation === 'SELL' ? 'sell' : 'hold');
+                        html += `<tr>
+                            <td>${a.id}</td>
+                            <td>$${a.best_token}</td>
+                            <td>${a.score}</td>
+                            <td class="${recClass}"><strong>${a.recommendation}</strong></td>
+                        </tr>`;
+                    });
+                    html += '</table>';
+                    container.innerHTML = html;
+                });
+        }
+        
+        fetchConsensus();
+        fetchAgents();
+        setInterval(fetchConsensus, 10000);
+        setInterval(fetchAgents, 10000);
+    </script>
+</body>
+</html>
